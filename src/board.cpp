@@ -2375,11 +2375,12 @@ void Board::gtp_failure (GTP_Process *, const QString &err)
 			Qt::NoButton, Qt::NoButton);
 	msg.exec();
 }
-
+#include <iostream>
 void Board::gtp_exited (GTP_Process *)
 {
 	clear_eval_data ();
 	m_board_win->update_analysis (analyzer::disconnected);
+	std::cout<< "Ez mukodik\n";
 	QMessageBox::warning (this, PACKAGE, QObject::tr ("GTP process exited!!!! unexpectedly."));
 }
 
