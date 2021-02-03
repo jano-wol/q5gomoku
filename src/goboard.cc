@@ -872,125 +872,13 @@ void go_board::add_stone (int x, int y, stone_color col, bool process_captures)
 	bit_array pos (bitsize ());
 	bit_array pos_neighbours (bitsize ());
 	pos.set_bit (bitpos (x, y));
-	flood_step (pos_neighbours, pos);
-
-	int n_caps = 0;
-	int n_removed = 0;
-	if (process_captures) {
-		for (auto &it: opponent_units) {
-			if (!it.m_stones.intersect_p (pos_neighbours))
-				continue;
-			if (it.m_n_liberties == 1) {
-				/* Marker for "removed by this move". Zero-liberty groups
-				   added elsewhere by editing could remain on the board.  */
-				it.m_n_liberties = -1;
-				n_caps += it.m_stones.popcnt ();
-
-				bool changed = opponent_stones->andnot (it.m_stones);
-				if (!changed)
-					throw std::logic_error ("Removed stones do not exist");
-				n_removed++;
-			} else
-				it.m_n_liberties--;
-		}
-#ifdef CHECKING
-		size_t old_cnt = opponent_units.size ();
-#endif
-		opponent_units.erase (std::remove_if (opponent_units.begin (), opponent_units.end (),
-						      [](const stone_unit &unit) { return unit.m_n_liberties == -1; }),
-				      opponent_units.end ());
-#ifdef CHECKING
-		if (opponent_units.size () + n_removed != old_cnt)
-			throw std::logic_error ("didn't remove enough units");
-#endif
-		if (col == black)
-			m_caps_b += n_caps;
-		else
-			m_caps_w += n_caps;
-	}
-
-	/* Merge with neighbours.  */
-	stone_unit *first_neighbour = nullptr;
-	for (auto &it: player_units) {
-		if (!it.m_stones.intersect_p (pos_neighbours))
-			continue;
-		if (first_neighbour == nullptr) {
-			first_neighbour = &it;
-			it.m_stones.ior (pos);
-			continue;
-		}
-		first_neighbour->m_stones.ior (it.m_stones);
-		it.m_n_liberties = -1;
-	}
-	if (first_neighbour == nullptr) {
-		player_units.emplace_back (pos, count_liberties (pos));
-		first_neighbour = &player_units.back ();
-	} else if (n_caps == 0) {
-		first_neighbour->m_n_liberties = count_liberties (first_neighbour->m_stones);
-	}
-	if (first_neighbour->m_n_liberties == 0 && process_captures) {
-#ifdef DEBUG
-		std::cerr << "suicide move found\n";
-#endif
-		player_stones->andnot (first_neighbour->m_stones);
-		if (col == black)
-			m_caps_w += first_neighbour->m_stones.popcnt ();
-		else
-			m_caps_b += first_neighbour->m_stones.popcnt ();
-		first_neighbour->m_n_liberties = -1;
-		/* Recalculate liberties for everything.  */
-		n_caps = 1;
-	}
-	player_units.erase (std::remove_if (player_units.begin (), player_units.end (),
-					    [](const stone_unit &unit) { return unit.m_n_liberties == -1; }),
-			    player_units.end ());
-
-	if (n_caps > 0) {
-		recalc_liberties ();
-	}
-	verify_invariants ();
-#if 0 && defined CHECKING
-	identify_units ();
-	verify_invariants ();
-#endif
 }
 
 bool go_board::valid_move_p (int x, int y, stone_color col)
 {
 	if (stone_at (x, y) != none)
 		return false;
-
-	/* Simplest case: test for plainly enough liberties.  */
-	bit_array pos (bitsize ());
-	pos.set_bit (bitpos (x, y));
-
-	if (count_liberties (pos) > 0)
-		return true;
-
-	/* Look at surrounding units.  */
-	bit_array pos_neighbours (bitsize ());
-	flood_step (pos_neighbours, pos);
-
-	/* Extending a group of the same color?  */
-	std::vector<stone_unit> &player_units = col == black ? m_units_b : m_units_w;
-	for (const auto &it: player_units) {
-		if (!it.m_stones.intersect_p (pos_neighbours))
-			continue;
-		if (it.m_n_liberties > 1)
-			return true;
-	}
-
-	/* A valid capture?  */
-	std::vector<stone_unit> &opponent_units = col == black ? m_units_w : m_units_b;
-	for (const auto &it: opponent_units) {
-		if (!it.m_stones.intersect_p (pos_neighbours))
-			continue;
-		if (it.m_n_liberties == 1)
-			return true;
-	}
-	/* Slightly clunky: ko is checked later on, in add_child_move, by comparing
-	   board positions.  */
-	return false;
+	return true;
 }
 
 void go_board::verify_invariants ()
