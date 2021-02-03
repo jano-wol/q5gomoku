@@ -2380,7 +2380,7 @@ void Board::gtp_exited (GTP_Process *)
 {
 	clear_eval_data ();
 	m_board_win->update_analysis (analyzer::disconnected);
-	QMessageBox::warning (this, PACKAGE, QObject::tr ("GTP process exited unexpectedly."));
+	QMessageBox::warning (this, PACKAGE, QObject::tr ("GTP process exited!!!! unexpectedly."));
 }
 
 void Board::eval_received (const analyzer_id &id, const QString &move, int visits, bool have_score)
