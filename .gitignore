@@ -15,3 +15,12 @@ autom4te.cache
 /src/q4go
 /src/q4go.rcc.cc
 /stamp-h1
+**/*.o
+**/*.s
+**/*.log
+**/*.out
+**/.depend
+**/.vscode
+**/.idea
+**/__pycache__
+
