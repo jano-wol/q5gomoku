@@ -23,4 +23,5 @@ autom4te.cache
 **/.vscode
 **/.idea
 **/__pycache__
+**/build
 
