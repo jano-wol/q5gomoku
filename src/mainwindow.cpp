@@ -3553,7 +3553,7 @@ void MainWindow_GTP::gtp_exited (GTP_Process *)
 	if (game_mode () == modeComputer || game_mode () == modeObserveGTP) {
 		setGameMode (modeNormal);
 		show ();
-		QMessageBox::warning (this, PACKAGE, QObject::tr ("GTP process exited unexpectedly."));
+		QMessageBox::warning (this, PACKAGE, QObject::tr ("GTP process exited! unexpectedly."));
 	}
 }
 

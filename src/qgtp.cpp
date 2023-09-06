@@ -63,12 +63,13 @@ void GTP_Process::slot_started ()
 {
 	send_request ("protocol_version", &GTP_Process::startup_part2);
 }
-
+#include<iostream>
 void GTP_Process::slot_error (QProcess::ProcessError)
 {
 	m_stopped = true;
 	m_receivers.clear ();
-	m_dlg.hide ();
+	m_dlg.show ();
+	std::cout<< "prob1\n";
 	m_controller->gtp_exited (this);
 }
 

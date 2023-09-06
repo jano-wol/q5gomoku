@@ -543,7 +543,7 @@ void AnalyzeDialog::gtp_failure (GTP_Process *, const QString &err)
 void AnalyzeDialog::gtp_exited (GTP_Process *)
 {
 	clear_eval_data ();
-	QMessageBox::warning (this, PACKAGE, QObject::tr ("GTP process exited unexpectedly."));
+	QMessageBox::warning (this, PACKAGE, QObject::tr ("GTP process exited!!! unexpectedly."));
 	analyzer_state_changed ();
 }
 
