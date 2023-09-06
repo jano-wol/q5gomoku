@@ -24,4 +24,6 @@ autom4te.cache
 **/.idea
 **/__pycache__
 **/build
+**/src/share
+**/src/bin
 
