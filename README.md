@@ -4,7 +4,7 @@ q5Go derivative for gomoku. Please check the original project:
 https://github.com/bernds/q5Go
 
 
-# setup repo
+# Setup repo
 Supported os: Linux  
 
 Known dependencies:  
@@ -23,11 +23,11 @@ qmake ../src/q5go.pro PREFIX=.
 make  
 make install  
 
-# run the executable
+# Run the executable
 Run the executable. Still from the ./build directory run:  
 ./q5go
 
-# add gtp engine
+# Add gtp engine
 In Settings/Preferences go to Computer Go. Then choose New. Add the name and the executable path. Arguments:gtp  
 Restrictions should be not ticked off. Use for analysis should be ticked off. Then OK. Then Apply and OK.
 
