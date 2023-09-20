@@ -582,15 +582,15 @@ void AnalyzeDialog::start_job ()
 
 	game_state *root = gr->get_root ();
 	const go_board &b = root->get_board ();
-	if (b.size_x () != b.size_y ()) {
-		QMessageBox::warning (this, PACKAGE, tr ("Analysis is supported only for square boards!"));
-		return;
-	}
-	if (b.size_x () != boardsizeSpinBox->value ()) {
-		QMessageBox::warning (this, PACKAGE,
-				      tr ("File has a different boardsize than selected!"));
-		return;
-	}
+//	if (b.size_x () != b.size_y ()) {
+//		QMessageBox::warning (this, PACKAGE, tr ("Analysis is supported only for square boards!"));
+//		return;
+//	}
+//	if (b.size_x () != boardsizeSpinBox->value ()) {
+//		QMessageBox::warning (this, PACKAGE,
+//				      tr ("File has a different boardsize than selected!"));
+//		return;
+//	}
 	filenameEdit->setText ("");
 	int komi_val = komiComboBox->currentIndex ();
 

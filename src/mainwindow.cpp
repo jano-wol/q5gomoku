@@ -1741,8 +1741,8 @@ void MainWindow::populate_engines_menu ()
 	engine_map.clear ();
 
 	const go_board &b = m_game->get_root ()->get_board ();
-	if (b.size_x () != b.size_y ())
-		return;
+	//if (b.size_x () != b.size_y ())
+		//return;
 
 	qDebug () << "finding engines: " << b.size_x ();
 

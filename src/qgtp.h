@@ -74,7 +74,7 @@ protected:
 
 	void clear_eval_data ();
 
-	void start_analyzer (const Engine &engine, int size, double komi, bool show_dialog = true);
+	void start_analyzer (const Engine &engine, int size, double komi, bool show_dialog = true, int size_y_opt = -1);
 	void stop_analyzer ();
 	void pause_eval_updates (bool on) { m_pause_updates = on; }
 	bool pause_analyzer ();
@@ -110,7 +110,7 @@ class GTP_Process : public QProcess
 	GTP_Controller *m_controller;
 
 	int m_dlg_lines = 0;
-	int m_size_x, m_size_y;
+	int m_size_x, m_size_y, m_size_y_rectangle_fix;
 	/* The komi we've requested with the "komi" command.  The engine may have
 	   ignored it.  */
 	double m_komi;

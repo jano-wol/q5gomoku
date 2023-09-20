@@ -27,7 +27,7 @@ GTP_Process *GTP_Controller::create_gtp (const Engine &engine, int size_x, int s
 
 GTP_Process::GTP_Process(QWidget *parent, GTP_Controller *c, const Engine &engine,
 			 int size_x, int size_y, float komi, bool show_dialog)
-	: m_name (engine.title), m_dlg (parent, TextView::type::gtp), m_controller (c), m_size_x (size_x), m_size_y (size_y), m_komi (komi)
+	: m_name (engine.title), m_dlg (parent, TextView::type::gtp), m_controller (c), m_size_x (size_x), m_size_y (size_x), m_size_y_rectangle_fix(size_y), m_komi (komi)
 {
 	const QString &prog = engine.path;
 	const QString &args = engine.args;
@@ -231,6 +231,7 @@ void GTP_Process::receive_move (const QString &move)
 
 void GTP_Process::played_move (stone_color col, int x, int y)
 {
+	y += (m_size_y - m_size_y_rectangle_fix);
 	if (m_last_move != nullptr)
 		m_last_move = m_last_move->add_child_move (x, y, col);
 	char req[20];
@@ -647,7 +648,7 @@ void GTP_Eval_Controller::gtp_switch_ready ()
 	m_switch_pending = false;
 }
 
-void GTP_Eval_Controller::start_analyzer (const Engine &engine, int size, double komi, bool show_dialog)
+void GTP_Eval_Controller::start_analyzer (const Engine &engine, int size, double komi, bool show_dialog, int size_y_opt)
 {
 	if (m_analyzer != nullptr) {
 		m_analyzer->quit ();
@@ -655,7 +656,8 @@ void GTP_Eval_Controller::start_analyzer (const Engine &engine, int size, double
 		m_analyzer = nullptr;
 	}
 	m_analyzer_komi = komi;
-	m_analyzer = create_gtp (engine, size, komi, show_dialog);
+	int size_y = (size_y_opt == -1) ? size : size_y_opt;
+	m_analyzer = create_gtp (engine, size, size_y, komi, show_dialog);
 	analyzer_state_changed ();
 }
 

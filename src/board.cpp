@@ -2394,12 +2394,11 @@ void Board::eval_received (const analyzer_id &id, const QString &move, int visit
 
 void Board::start_analysis (const Engine &e)
 {
-	if (!m_dims.is_square ()) {
-		QMessageBox::warning (this, PACKAGE, tr ("Analysis is supported only for square boards!"));
-		return;
-	}
-
-	start_analyzer (e, m_dims.width (), 7.5);
+//	if (!m_dims.is_square ()) {
+//		QMessageBox::warning (this, PACKAGE, tr ("Analysis is supported only for square boards!"));
+//		return;
+//	}
+	start_analyzer (e, m_dims.width (), 7.5, true, m_dims.height());
 	m_board_win->update_analysis (analyzer::starting);
 }
 
