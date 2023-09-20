@@ -231,9 +231,10 @@ void GTP_Process::receive_move (const QString &move)
 
 void GTP_Process::played_move (stone_color col, int x, int y)
 {
+	int y1 = y;
 	y += (m_size_y - m_size_y_rectangle_fix);
 	if (m_last_move != nullptr)
-		m_last_move = m_last_move->add_child_move (x, y, col);
+		m_last_move = m_last_move->add_child_move (x, y1, col);
 	char req[20];
 	int first = x / 25;
 	x = x % 25;
