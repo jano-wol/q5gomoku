@@ -27,7 +27,7 @@
 #include "patternsearch.h"
 
 BoardView::BoardView (QWidget *parent, bool no_sync, bool no_marks)
-	: QGraphicsView(parent), m_vgrid_outline (1), m_hgrid_outline (1), m_dims (0, 0, DEFAULT_BOARD_SIZE, DEFAULT_BOARD_SIZE),
+	: QGraphicsView(parent), m_vgrid_outline (1), m_hgrid_outline (1), m_dims (0, 0, 16, 5),
 	  m_hoshis (1), m_never_sync (no_sync), m_no_marks (no_marks)
 {
 	setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -941,6 +941,12 @@ const QPixmap &BoardView::choose_stone_pixmap (stone_color c, stone_type type, i
 	}
 }
 
+const QPixmap &BoardView::drawCover (int /*bp*/)
+{
+	const QList<QPixmap> *l = imageHandler->getCoverPixmaps ();
+	return (*l)[0];
+}
+
 std::pair<stone_color, stone_type> BoardView::stone_to_display (const go_board &b, const bit_array *visible,
 								stone_color to_move, int x, int y,
 								const go_board &vars, int var_type)
@@ -1426,6 +1432,8 @@ QPixmap BoardView::draw_position (int default_vars_type)
 
 	int stone_offx = m_board_rect.left () - m_wood_rect.left () - square_size / 2;
 	int stone_offy = m_board_rect.top () - m_wood_rect.top () - square_size / 2;
+	
+	std::vector<int> longCol{0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0};
 	for (int tx = 0; tx < visx + 2 * dups_x; tx++)
 		for (int ty = 0; ty < visy + 2 * dups_y; ty++) {
 			int x = (tx + shiftx + (szx - dups_x)) % szx;
@@ -1433,6 +1441,13 @@ QPixmap BoardView::draw_position (int default_vars_type)
 			auto stone_display = stone_to_display (mn_board, visible, to_move, x, y, vars, var_type);
 			stone_color sc = stone_display.first;
 			stone_type type = stone_display.second;
+			if ((longCol[tx] == 0) && ((ty == 0) || (ty == visy + 2 * dups_y - 1)))
+			{
+				int bp = b.bitpos (x, y);
+				painter.drawPixmap (stone_offx + tx * square_size,
+				stone_offy + ty * square_size,
+				drawCover(bp));
+			}
 			if (sc != none) {
 				int bp = b.bitpos (x, y);
 				painter.drawPixmap (stone_offx + tx * square_size,

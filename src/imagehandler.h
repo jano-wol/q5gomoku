@@ -37,13 +37,14 @@ public:
 	void rescale(int size);
 	const QList<QPixmap> *getStonePixmaps() const { return &stonePixmaps; }
 	const QList<QPixmap> *getGhostPixmaps() const { return &ghostPixmaps; }
+	const QList<QPixmap> *getCoverPixmaps() const { return &coverPiximaps; }
 
 	typedef std::tuple<int, int, int, int> t_params;
 
 	void set_stone_params (const std::tuple<t_params, t_params, int, bool> &, int);
 	void set_stone_params (int preset, int shadow);
 	void set_stone_look (int l) { m_look = l; }
-	void paint_one_stone (QImage &, bool white, int size, int idx = 0);
+	void paint_one_stone (QImage &, bool white, int size, int idx = 0, bool cover=false);
 	void paint_shadow_stone (QImage &si, int d);
 	QColor white_color () { return m_w_col; }
 	QColor black_color () { return m_b_col; }
@@ -63,7 +64,7 @@ private:
 			      bool clamshell, int idx = 0);
 	void ghostImage(QImage *img);
 
-	QList<QPixmap> stonePixmaps, ghostPixmaps;
+	QList<QPixmap> stonePixmaps, ghostPixmaps, coverPiximaps;
 };
 
 #endif

@@ -487,6 +487,21 @@ static void paint_white_stone_svg (QImage &img)
 	painter.end ();
 }
 
+static void paint_cover (QImage &img)
+{
+	/* Gets scaled to the pixmap size during render.  */
+	int size = 30;
+	svg_builder svg (size, size);
+	double border = 1;
+	svg.square_at (size/2, size/2, size - border * 0.5, "red", "red");
+	QSvgRenderer renderer (svg);
+	img.fill (Qt::transparent);
+	QPainter painter;
+	painter.begin (&img);
+	renderer.render (&painter);
+	painter.end ();
+}
+
 static void paint_black_stone_svg (QImage &img)
 {
 	/* Gets scaled to the pixmap size during render.  */
@@ -501,8 +516,13 @@ static void paint_black_stone_svg (QImage &img)
 	painter.end ();
 }
 
-void ImageHandler::paint_one_stone (QImage &img, bool white, int size, int idx)
+void ImageHandler::paint_one_stone (QImage &img, bool white, int size, int idx, bool cover)
 {
+	if (cover)
+	{
+		paint_cover(img);
+		return;	
+	}
 	if (white) {
 		if (m_look == 1) {
 			paint_white_stone_svg (img);
@@ -532,13 +552,21 @@ void ImageHandler::init(int size)
 
 	//black stone
 	QImage ib = QImage(size, size, QImage::Format_ARGB32);
+	QImage ib2 = QImage(size, size, QImage::Format_ARGB32);
 
 	paint_one_stone (ib, false, size, 0);
+	paint_one_stone (ib2, false, size, 0, true);
+
 
 	stonePixmaps.append(QPixmap::fromImage(ib,
 						Qt::PreferDither |
 						Qt::DiffuseAlphaDither |
 						Qt::DiffuseDither));
+
+	coverPiximaps.append(QPixmap::fromImage(ib2,
+						Qt::PreferDither |
+						Qt::DiffuseAlphaDither |
+						Qt::DiffuseDither));				
 
 	QImage gb(ib);
 	ghostImage(&gb);
@@ -578,10 +606,15 @@ void ImageHandler::rescale(int size)
 
 	//repaint black stones
 	QImage ib = QImage(size, size, QImage::Format_ARGB32);
+	QImage ib2 = QImage(size, size, QImage::Format_ARGB32);
 	paint_one_stone (ib, false, size);
+	paint_one_stone (ib2, false, size, 0, true);
 	stonePixmaps[0].convertFromImage(ib, Qt::PreferDither |
 					 Qt::DiffuseAlphaDither |
 					 Qt::DiffuseDither);
+	coverPiximaps[0].convertFromImage(ib2, Qt::PreferDither |
+					 Qt::DiffuseAlphaDither |
+					 Qt::DiffuseDither);				 
 	QImage gb(ib);
 	ghostImage(&gb);
 	ghostPixmaps[0].convertFromImage(gb, Qt::PreferDither |

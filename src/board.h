@@ -116,6 +116,7 @@ protected:
 
 	virtual void sync_appearance (bool board_only = true);
 	const QPixmap &choose_stone_pixmap (stone_color, stone_type, int);
+	const QPixmap &drawCover (int bp);
 
 	int n_dups_h ();
 	int n_dups_v ();

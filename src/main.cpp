@@ -345,7 +345,7 @@ bool open_local_board (QWidget *parent, game_dialog_type type, const QString &sc
 
 	case game_dialog_type::none:
 	{
-		go_board b (19);
+		go_board b (16, 5);
 		game_info info;
 		info.name_w = QObject::tr ("White").toStdString ();
 		info.name_b = QObject::tr ("Black").toStdString ();
