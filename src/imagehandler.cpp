@@ -493,7 +493,7 @@ static void paint_cover (QImage &img)
 	int size = 30;
 	svg_builder svg (size, size);
 	double border = 1;
-	svg.square_at (size/2, size/2, size - border * 0.5, "red", "red");
+	svg.square_at (size/2, size/2, size - border * 0.5, "brown", "brown");
 	QSvgRenderer renderer (svg);
 	img.fill (Qt::transparent);
 	QPainter painter;
